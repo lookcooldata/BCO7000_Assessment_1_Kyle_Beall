@@ -1,0 +1,28 @@
+---
+title: "Assessment 1.1"
+author: "Kyle Beall"
+date: "5/15/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#RMarkdown editing 
+
+R Markdown provides an authoring framework for **data science**. You can use a single R Markdown file to both *save* and *execute* code and to generate high quality reports that can be shared with an audience.
+R Markdown documents are fully reproducible and support dozens of static and dynamic output formats. 
+
+[links](https://rmarkdown.rstudio.com/lesson-8.html)
+
+```{r}
+library(tidyverse)
+library(janitor)
+
+fastfood<-read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv")
+
+fastfood%>%head(n = 10)
+
+```
+
