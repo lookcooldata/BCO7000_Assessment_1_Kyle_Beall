@@ -19,10 +19,19 @@ R Markdown documents are fully reproducible and support dozens of static and dyn
 ```{r}
 library(tidyverse)
 library(janitor)
+```
 
+```{r}
 fastfood<-read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv")
 
 fastfood%>%head(n = 10)
+
+fastfood%>%filter(calories>1000)
+
+dont_eat_this<-fastfood%>%
+  filter(total_fat>40, total_carb>80)
+
+fastfood%>%filter(restaurant == "Mcdonalds")
 
 ```
 
