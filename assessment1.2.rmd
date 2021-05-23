@@ -1,0 +1,73 @@
+---
+title: "Assessment 1.2"
+author: "Kyle Beall"
+date: "5/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+#install.packages("skimr")
+library(skimr)
+```
+
+#Data Wrangling
+
+```{r}
+# number 3
+fast_food<-read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv")
+
+fast_food%>%skim()
+```
+
+```{r}
+# number 4
+fast_food%>%count(restaurant)
+
+```
+
+```{r}
+# number 5
+fast_food%>%
+  group_by(restaurant)%>%
+  summarise(average_calories=mean(calories))%>%
+  ungroup()
+
+# number 6
+fast_food<-
+  fast_food%>%
+  group_by(restaurant)%>%
+  mutate(average_calories=mean(calories))%>%
+  ungroup()
+
+```
+
+```{r}
+# number 7
+fast_food%>%
+  ggplot(
+    aes(total_fat)
+  )+
+  geom_histogram()+
+  facet_wrap(vars(restaurant))
+```
+
+
+7. Display the data vis of total fat per each type of restaurant. Write a narration (2-3 sentences) why you believe this type of data viz presents such information best. **
+
+8. Display the count of observations per each type of restaurant
+
+9. Add a variable to the dataset, which calculates the maximum total fat per type of restaurant and call it `max_total_fat` 
+
+10. Use observations for Mcdonalds to plot sugar variable against protein with `geom_point()` 
+
+- Save your .rmd file 
+
+- Do a commit in Git tab
+
+- Push in the same tab
+
