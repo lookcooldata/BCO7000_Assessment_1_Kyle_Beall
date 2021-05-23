@@ -18,26 +18,26 @@ library(skimr)
 #Data Wrangling
 
 ```{r}
-# number 3
+#number 3
 fast_food<-read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv")
 
 fast_food%>%skim()
 ```
 
 ```{r}
-# number 4
+#number 4
 fast_food%>%count(restaurant)
 
 ```
 
 ```{r}
-# number 5
+#number 5
 fast_food%>%
   group_by(restaurant)%>%
   summarise(average_calories=mean(calories))%>%
   ungroup()
 
-# number 6
+#number 6
 fast_food<-
   fast_food%>%
   group_by(restaurant)%>%
@@ -47,7 +47,11 @@ fast_food<-
 ```
 
 ```{r}
-# number 7
+#number 7
+fast_food$restaurant<-as_factor(fast_food$restaurant)
+
+class(fast_food$restaurant)
+
 fast_food%>%
   ggplot(
     aes(total_fat)
@@ -56,18 +60,30 @@ fast_food%>%
   facet_wrap(vars(restaurant))
 ```
 
+Above we have a series of histograms displaying `total_fat` found in each type of `restaurant`. Side by side, we can get a good idea of how each restaurant compares to each other in terms of how much fat their food's contain. For example, we can see from these graphs that Chic Fil-A, overall, offers food with the least amount of total fat.
 
-7. Display the data vis of total fat per each type of restaurant. Write a narration (2-3 sentences) why you believe this type of data viz presents such information best. **
+```{r}
+#number 8
+fast_food%>%count(restaurant)
 
-8. Display the count of observations per each type of restaurant
+```
 
-9. Add a variable to the dataset, which calculates the maximum total fat per type of restaurant and call it `max_total_fat` 
+```{r}
+#number 9
+fast_food<-fast_food%>%
+  group_by(restaurant)%>%
+  mutate(max_total_fat=max(total_fat))%>%
+  ungroup
 
-10. Use observations for Mcdonalds to plot sugar variable against protein with `geom_point()` 
+```
 
-- Save your .rmd file 
+```{r}
+#number 10
+fast_food%>%
+  group_by(restaurant=="Mcdonalds")%>%
+  ggplot(
+    aes(sugar, protein)
+  )+
+  geom_point()
 
-- Do a commit in Git tab
-
-- Push in the same tab
-
+```
