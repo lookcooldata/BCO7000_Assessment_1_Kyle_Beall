@@ -1,0 +1,93 @@
+---
+title: "Assessment 1.3"
+author: "Kyle Beall s4650004"
+date: "5/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(skimr)
+library(lubridate)
+library(scales)
+library(janitor)
+```
+
+```{r}
+fastfood <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv")
+```
+
+```{r}
+fastfood%>%skim()
+```
+Here we want to change some of our variables. The 'Restaurant', and 'Salad' variables should be removed as it does not give us any useful information. The 'Item' variable can remain as a character. All of the variables that are currently considered numbers are okay to stay as numbers. 
+
+```{r}
+fastfood$restaurant <- as_factor(fastfood$restaurant)
+fastfood <- fastfood %>% select(-salad)
+```
+
+```{r}
+fastfood <- fastfood %>%
+  mutate_if(is.numeric, funs(ifelse(is.na(.), 0, .)))
+```
+
+```{r}
+fastfood <- fastfood %>%
+  mutate(calories_type = fastfood$calories %>%
+  cut_number(n=3, c("low", "med", "high"), ordered_result = TRUE))
+```
+
+```{r}
+fastfood %>%
+  select(restaurant, calories_type, item) %>%
+  ggplot(aes(restaurant, fill = calories_type))+
+  geom_bar(position = "dodge")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(x = "",
+       y = "Number of Items",
+       title = "Any low-cal options?")
+```
+
+```{r}
+fastfood <- fastfood%>%
+  mutate(trans_fat_percent = trans_fat/total_fat)
+```
+
+```{r}
+fastfood %>%
+  ggplot(aes(total_fat, trans_fat_percent)) +
+  geom_point()+
+  facet_wrap(vars(restaurant))+
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "grams of total fat",
+       y = "% of trans fat",
+       title = "")
+  
+```
+```{r}
+fastfood %>% 
+  group_by(restaurant) %>%
+  mutate(mean_fat = mean(total_fat)) %>%
+  select(restaurant, mean_fat) %>%
+  ungroup()
+```
+
+
+```{r}
+fastfood %>% 
+  group_by(restaurant) %>%
+  mutate(mean_fat = mean(total_fat)) %>%
+  ggplot(aes(restaurant, fill = mean_fat)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(x = "",
+       y = "Average fat(gms) for all items",
+       title = "")
+  
+```
+
